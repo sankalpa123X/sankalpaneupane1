@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Role Selector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      color: #2c3e50;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .role-card {
+      background: white;
+      border-left: 6px solid #3498db;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .role-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .tooltip {
+      position: absolute;
+      top: 50%;
+      left: 105%;
+      transform: translateY(-50%);
+      background: #2c3e50;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      display: none;
+      white-space: nowrap;
+    }
+    .role-card:hover .tooltip {
+      display: block;
+    }
+    #detailView {
+      display: none;
+      margin-top: 2rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #detailView img {
+      max-width: 100%;
+      margin-top: 1rem;
+      border-radius: 10px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    input[type="file"] {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Select a Role</h1>
+  <div class="list" id="roleGrid"></div>
+
+  <div id="detailView">
+    <button onclick="goBack()">← Back</button>
+    <h2 id="roleTitle"></h2>
+    <p id="roleDescription"></p>
+    <input type="file" id="photoUpload" accept="image/*" onchange="previewPhoto()"/>
+    <img id="photoPreview" style="display:none"/>
+  </div>
+
+  <script>
+    const roles = [
+      {
+        name: "Monitor",
+        shortDesc: "Keeps things in order.",
+        fullDesc: "The monitor ensures rules are followed and helps with organizing classroom tasks."
+      },
+      {
+        name: "Tech Support",
+        shortDesc: "Fixes tech issues.",
+        fullDesc: "Responsible for setting up and managing technical equipment like projectors or speakers."
+      },
+      {
+        name: "Hygiene Hero",
+        shortDesc: "Promotes cleanliness.",
+        fullDesc: "Encourages students to maintain a clean and hygienic environment in class."
+      },
+      {
+        name: "Register Manager",
+        shortDesc: "Takes attendance.",
+        fullDesc: "Keeps track of attendance and helps with class participation records."
+      },
+      {
+        name: "Classroom Manager",
+        shortDesc: "Manages class needs.",
+        fullDesc: "Takes care of seating, materials, and organizing classroom logistics."
+      },
+      {
+        name: "Classroom Decorator",
+        shortDesc: "Makes class look great!",
+        fullDesc: "Designs and decorates the classroom for special days and events."
+      }
+    ];
+
+    const roleGrid = document.getElementById('roleGrid');
+    const detailView = document.getElementById('detailView');
+    const roleTitle = document.getElementById('roleTitle');
+    const roleDescription = document.getElementById('roleDescription');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoUpload = document.getElementById('photoUpload');
+
+    roles.forEach(role => {
+      const card = document.createElement('div');
+      card.className = 'role-card';
+      card.innerHTML = `
+        <strong>${role.name}</strong>
+        <div class="tooltip">${role.shortDesc}</div>
+      `;
+      card.onclick = () => showDetail(role);
+      roleGrid.appendChild(card);
+    });
+
+    function showDetail(role) {
+      roleGrid.style.display = 'none';
+      detailView.style.display = 'block';
+      roleTitle.innerText = role.name;
+      roleDescription.innerText = role.fullDesc;
+      photoPreview.src = '';
+      photoPreview.style.display = 'none';
+      photoUpload.value = '';
+    }
+
+    function goBack() {
+      detailView.style.display = 'none';
+      roleGrid.style.display = 'flex';
+    }
+
+    function previewPhoto() {
+      const file = photoUpload.files[0];
+      if (file) {
+        photoPreview.src = URL.createObjectURL(file);
+        photoPreview.style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>
